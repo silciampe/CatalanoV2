@@ -1,7 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
-class MotoPartes(models.Model):
+class MotoParte(models.Model):
     id_catalano = models.CharField(max_length=250, null=False, blank=False)
     articulo = models.CharField(max_length=250, null=True, blank=True)
     grupo = models.CharField(max_length=250, null=True, blank=True)
@@ -23,7 +23,7 @@ class MotoPartes(models.Model):
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_created=True)
     
-class AgroPartes(models.Model):
+class AgroParte(models.Model):
     id_catalano = models.CharField(max_length=250, null=False, blank=False)
     grupo = models.CharField(max_length=250, null=True, blank=True)
     medida_cub = models.CharField(max_length=250, null=True, blank=True)
@@ -45,7 +45,8 @@ class AgroPartes(models.Model):
     created = models.DateTimeField(auto_created=True)
     
    
-class Usuarios(AbstractUser):
+class Cliente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     razon_social = models.CharField(max_length=250, null=True, blank=True)
     puntos_moto = models.IntegerField()
     puntos_agro = models.IntegerField()
