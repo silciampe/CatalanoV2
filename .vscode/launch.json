@@ -14,7 +14,8 @@
             "django": true,
             "autoStartBrowser": false,
             "program": "${workspaceFolder}\\manage.py",
-            "python": "E:\\CatalanoV2\\Scripts\\python.exe"
+            "python": "E:\\CatalanoV2\\Scripts\\python.exe",
+            "justMyCode": false
         }
     ]
 }
