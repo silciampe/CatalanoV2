@@ -1,9 +1,11 @@
 from rest_framework import viewsets
 from django.contrib.auth.models import User
 from rest_framework.decorators import action 
+from rest_framework.response import Response
 from CatalanoBackend.serializers import UserSerializer  
 from .models import MotoParte 
 from .serializers import MotoParteSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -11,13 +13,27 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     
 class MotoParteViewSet(viewsets.ModelViewSet):
-    queryset = MotoParte.objects.all()
+    queryset = MotoParte.objects.all().order_by('id_catalano')
     serializer_class = MotoParteSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['grupo', 'id_catalano', 'marca', 'dientes', 'modelo', 'cadena', 'diametro_exterior', 'diametro_interior', 'diametro_rodillo', 'cantidad_agujero_x_diametro_agujero', 'cantidad_estrias_x_tipo_rosca', 'cantidad_estrias_x_espesor_estrias']
     
-    def get_queryset(self):
-        qs = MotoParte.objects.all()
-        grupo = self.request.query_params.get('grupo')
-        if grupo: 
-            qs = qs.filter(grupo=grupo)
-        return qs
+        # Método para obtener marcas según el grupo
+    @action(detail=False, methods=['get'], url_path='marcas')
+    def marcas(self, request):
+        grupo = request.query_params.get('grupo', None)
+        if grupo:
+            marcas = MotoParte.objects.filter(grupo=grupo).values_list('marca', flat=True).distinct()
+            return Response(list(marcas))
+        return Response([])
+
+    # Método para obtener modelos según el grupo y la marca
+    @action(detail=False, methods=['get'], url_path='modelos')
+    def modelos(self, request):
+        grupo = request.query_params.get('grupo', None)
+        marca = request.query_params.get('marca', None)
+        if grupo and marca:
+            modelos = MotoParte.objects.filter(grupo=grupo, marca=marca).values_list('modelo', flat=True).distinct()
+            return Response(list(modelos))
+        return Response([])
     
