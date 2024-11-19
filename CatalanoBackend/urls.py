@@ -23,6 +23,7 @@ from CatalanoBackend import api
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
 router.register(r'motopartes', api.MotoParteViewSet)
+router.register(r'agropartes', api.AgroParteViewSet)
 
 
 urlpatterns = [

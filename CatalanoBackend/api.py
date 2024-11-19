@@ -4,7 +4,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from CatalanoBackend.serializers import UserSerializer  
 from .models import MotoParte 
+from .models import AgroParte 
 from .serializers import MotoParteSerializer
+from .serializers import AgroParteSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -36,4 +38,10 @@ class MotoParteViewSet(viewsets.ModelViewSet):
             modelos = MotoParte.objects.filter(grupo=grupo, marca=marca).values_list('modelo', flat=True).distinct()
             return Response(list(modelos))
         return Response([])
+    
+class AgroParteViewSet(viewsets.ModelViewSet):
+    queryset = AgroParte.objects.all().order_by('id_catalano')
+    serializer_class = AgroParteSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['grupo', 'id_catalano', 'medida_cub', "espesor_mm", 'dientes', 'rad_mm', 'modelo', 'marca', 'cadena', 'observacion', 'diametro_exterior', 'diametro_interior', 'diametro_rodillo', 'cantidad_agujero_x_diametro_agujero', 'cantidad_estrias_x_tipo_rosca', 'cantidad_estrias_x_espesor_estrias', 'imagen']
     
