@@ -144,3 +144,4 @@ try:
     from .local_settings import *
 except ImportError:
     print("No local_settings file found.")
+    

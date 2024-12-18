@@ -19,7 +19,7 @@ class MotoParte(models.Model):
     cantidad_agujero_x_diametro_agujero = models.CharField(max_length=250, null=True, blank=True)
     cantidad_estrias_x_tipo_rosca = models.CharField(max_length=250, null=True, blank=True)
     cantidad_estrias_x_espesor_estrias = models.CharField(max_length=250, null=True, blank=True)  
-    imagen = models.ImageField(upload_to="moto_imagenes")  
+    imagen = models.ImageField(upload_to="static/imagenes/motopartes")  
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_created=True)
     
@@ -40,7 +40,7 @@ class AgroParte(models.Model):
     cantidad_agujero_x_diametro_agujero = models.CharField(max_length=250, null=True, blank=True)
     cantidad_estrias_x_tipo_rosca = models.CharField(max_length=250, null=True, blank=True)
     cantidad_estrias_x_espesor_estrias = models.CharField(max_length=250, null=True, blank=True)    
-    imagen = models.ImageField(upload_to="agro_imagenes")  
+    imagen = models.ImageField(upload_to="static/imagenes/agropartes")  
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_created=True)
     
