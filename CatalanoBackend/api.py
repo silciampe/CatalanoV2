@@ -158,3 +158,12 @@ class AgroParteViewSet(viewsets.ModelViewSet):
         resultados = AgroParte.objects.filter(filters).order_by('id_catalano')
         serializer = self.get_serializer(resultados, many=True)
         return Response(serializer.data)
+    
+    # Acción personalizada para subir archivos con motopartes
+    @action(detail=False, methods=['post'], url_path='importar')
+    def importar(self, request):
+        file = request.FILES['file']
+        for line in file:
+            print(line)
+
+        return Response('exito')

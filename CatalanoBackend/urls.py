@@ -17,14 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from . import views
+
 from CatalanoBackend import api
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
 router.register(r'motopartes', api.MotoParteViewSet)
 router.register(r'agropartes', api.AgroParteViewSet)
-
 
 urlpatterns = [
     path('', include(router.urls)),
