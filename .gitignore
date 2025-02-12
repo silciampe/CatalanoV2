@@ -1,7 +1,5 @@
 __pycache__/
 .vscode/
-.vscode_bak/
 staticfiles/
 CatalanoBackend/local_settings.py
-CatalanoBackend/local_settings_bak.py
 db.sqlite3
