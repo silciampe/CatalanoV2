@@ -27,9 +27,10 @@ SECRET_KEY = 'django-insecure-be$lga$^_&$awwf)0xbx3t@*l2i+esosvsk4y0q$q#s)j-u-gt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1:3000']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://127.0.0.1:8000','http://127.0.0.1']
+
 
 
 # Application definition
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "corsheaders",
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
     'CatalanoBackend',
 ]
@@ -63,9 +65,6 @@ ROOT_URLCONF = 'CatalanoBackend.urls'
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 

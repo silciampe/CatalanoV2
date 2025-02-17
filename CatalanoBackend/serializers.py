@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import MotoParte 
-from .models import AgroParte 
+from .models import MotoParte, AgroParte, Cliente 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -17,3 +16,8 @@ class AgroParteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = AgroParte
         fields = ['grupo', 'id_catalano', 'medida_cub', "espesor_mm", 'dientes', 'rad_mm', 'modelo', 'marca', 'cadena', 'observacion', 'diametro_exterior', 'diametro_interior', 'diametro_rodillo', 'cantidad_agujero_x_diametro_agujero', 'cantidad_estrias_x_tipo_rosca', 'cantidad_estrias_x_espesor_estrias', 'imagen']
+
+class ClienteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cliente
+        fields = ['razon_social', 'puntos_moto', 'puntos_agro']

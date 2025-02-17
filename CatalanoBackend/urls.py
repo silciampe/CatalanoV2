@@ -15,10 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 
-from CatalanoBackend import api, views
+from CatalanoBackend import api, views, auth
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
@@ -29,6 +29,9 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('api/importarMotopartes/', views.ImportarMotopartes.as_view(), name='importarMotopartes')
-
+    path('api/importarMotopartes/', views.ImportarMotopartes.as_view(), name='importarMotopartes'),
+    re_path('login/', auth.login, name='login'),
+    re_path('logout/', auth.logout, name='logout'),
+    re_path('registro/', auth.registro),
+    re_path('perfil/', auth.perfil),
 ]

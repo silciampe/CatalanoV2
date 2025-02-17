@@ -1,5 +1,3 @@
-
-
 from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -15,6 +13,10 @@ class ImportarMotopartes(View):
         archivo = request.FILES['file']
         str_file = io.StringIO(archivo.read().decode('utf-8'), newline='\n')
         #file_extension = pathlib.Path(file.name).suffix
+
+        #TODO: agregar static/imagenes/motopartes a las imagenes
+
+
         filereader = csv.reader(str_file)
         for linea in filereader:
             if linea[0] == 'DISCOS Y CUCHILLAS':
@@ -31,7 +33,7 @@ class ImportarMotopartes(View):
                       rad_mm=self.sanitize_data(linea[7]),
                       observacion=self.sanitize_data(linea[8]),
                       marca=self.sanitize_data(linea[9]),
-                      imagen=self.sanitize_data(linea[10])
+                      imagen=self.format_image_path(linea[10])
                   )
               else:
                   AgroParte.objects.create(
@@ -45,7 +47,7 @@ class ImportarMotopartes(View):
                       rad_mm=self.sanitize_data(linea[7]),
                       observacion=self.sanitize_data(linea[8]),
                       marca=self.sanitize_data(linea[9]),
-                      imagen=self.sanitize_data(linea[10])
+                      imagen=self.format_image_path(linea[10])
                   )
             elif linea[0] == 'MEDIAS LLANTAS': 
               agroparte = AgroParte.objects.filter(id_catalano=linea[2])
@@ -59,7 +61,7 @@ class ImportarMotopartes(View):
                       cantidad_agujero_x_diametro_agujero=self.sanitize_data(linea[7]),
                       marca=self.sanitize_data(linea[8]),
                       espesor_mm=self.sanitize_data(linea[9]),
-                      imagen=self.sanitize_data(linea[10])
+                      imagen=self.format_image_path(linea[10])
                   )
               else:
                 AgroParte.objects.create(
@@ -72,7 +74,7 @@ class ImportarMotopartes(View):
                     cantidad_agujero_x_diametro_agujero=self.sanitize_data(linea[7]),
                     marca=self.sanitize_data(linea[8]),
                     espesor_mm=self.sanitize_data(linea[9]),
-                    imagen=self.sanitize_data(linea[10])
+                    imagen=self.format_image_path(linea[10])
                 )
             elif linea[0] == 'DISCOS DENTADOS ORIGINALES':
               agroparte = AgroParte.objects.filter(id_catalano=linea[2])
@@ -82,7 +84,7 @@ class ImportarMotopartes(View):
                       modelo=self.sanitize_data(linea[1]),
                       dientes=self.sanitize_data(linea[3]),
                       diametro_interior=self.sanitize_data(linea[4]),
-                      imagen=self.sanitize_data(linea[5])
+                      imagen=self.format_image_path(linea[5])
                   )
               else:
                 AgroParte.objects.create(
@@ -91,7 +93,7 @@ class ImportarMotopartes(View):
                     modelo=self.sanitize_data(linea[1]),
                     dientes=self.sanitize_data(linea[3]),
                     diametro_interior=self.sanitize_data(linea[4]),
-                    imagen=self.sanitize_data(linea[5])
+                    imagen=self.format_image_path(linea[5])
                 )
 
 
@@ -101,4 +103,8 @@ class ImportarMotopartes(View):
     
     def sanitize_data(self, data):
         return data.strip().strip('"', '')
+    
+    def format_image_path(self, image):
+        image = self.sanitize_data(image)
+        return f"static/imagenes/agropartes/{image}"
 
