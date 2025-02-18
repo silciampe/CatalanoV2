@@ -46,10 +46,15 @@ class AgroParte(models.Model):
     
    
 class Cliente(models.Model):
+    TIPO_CLIENTE = [
+        ('Agro', 'Agro'),
+        ('Moto', 'Moto'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     razon_social = models.CharField(max_length=250, null=True, blank=True)
-    puntos_moto = models.IntegerField()
-    puntos_agro = models.IntegerField()
+    puntos = models.IntegerField()
+    tipo_cliente = models.CharField(max_length=4, choices=TIPO_CLIENTE, default='Moto')
     cuit = models.CharField(max_length=30, null=True, blank=True)
     fecha_actualizacion = models.DateField(auto_now=True)
     rubro = models.IntegerField()
@@ -58,7 +63,8 @@ class Cliente(models.Model):
 class Premio(models.Model):
     nombre = models.CharField(max_length=250, null=True, blank=True)
     descripcion = models.CharField(max_length=250, null=True, blank=True)
-    puntos = models.IntegerField()
+    puntos_motoparte = models.IntegerField()
+    puntos_agroparte = models.IntegerField()
     stock = models.IntegerField()
     orden = models.IntegerField()
     imagen = models.ImageField(upload_to="imagenes/premios")  

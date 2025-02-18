@@ -24,8 +24,8 @@ class MotoParteAdmin(admin.ModelAdmin):
 
 class PremioAdmin(admin.ModelAdmin):
     model = Premio
-    list_display = ['nombre', 'descripcion', 'puntos']
-    list_filter = ['nombre', 'descripcion', 'puntos']
+    list_display = ['nombre', 'descripcion', 'puntos_agroparte', 'puntos_motoparte']
+    list_filter = ['nombre', 'descripcion', 'puntos_agroparte', 'puntos_motoparte']
     
 admin.site.unregister(User)
 admin.site.register(AgroParte, AgroParteAdmin)

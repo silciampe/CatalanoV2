@@ -20,10 +20,18 @@ class AgroParteSerializer(serializers.HyperlinkedModelSerializer):
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
-        fields = ['razon_social', 'puntos_moto', 'puntos_agro']
+        fields = ['razon_social', 'puntos', 'tipo_cliente']
 
 
 class PremioSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        cliente = self.context['request'].user.cliente
+        ret["puntos"] = instance.puntos_agroparte if cliente.tipo_cliente == 'Agro' else instance.puntos_motoparte 
+
+        return ret
+
     class Meta:
         model = Premio
-        fields = ['nombre', 'descripcion', 'puntos', 'imagen']
+        fields = ['nombre', 'descripcion', 'imagen']
