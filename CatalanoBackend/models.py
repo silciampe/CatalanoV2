@@ -19,7 +19,7 @@ class MotoParte(models.Model):
     cantidad_agujero_x_diametro_agujero = models.CharField(max_length=250, null=True, blank=True)
     cantidad_estrias_x_tipo_rosca = models.CharField(max_length=250, null=True, blank=True)
     cantidad_estrias_x_espesor_estrias = models.CharField(max_length=250, null=True, blank=True)  
-    imagen = models.ImageField(upload_to="static/imagenes/motopartes")  
+    imagen = models.ImageField(upload_to="imagenes/motopartes")  
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_created=True)
     
@@ -40,7 +40,7 @@ class AgroParte(models.Model):
     cantidad_agujero_x_diametro_agujero = models.CharField(max_length=250, null=True, blank=True)
     cantidad_estrias_x_tipo_rosca = models.CharField(max_length=250, null=True, blank=True)
     cantidad_estrias_x_espesor_estrias = models.CharField(max_length=250, null=True, blank=True)    
-    imagen = models.ImageField(upload_to="static/imagenes/agropartes")  
+    imagen = models.ImageField(upload_to="imagenes/agropartes")  
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_created=True)
     
@@ -54,6 +54,16 @@ class Cliente(models.Model):
     fecha_actualizacion = models.DateField(auto_now=True)
     rubro = models.IntegerField()
     
+
+class Premio(models.Model):
+    nombre = models.CharField(max_length=250, null=True, blank=True)
+    descripcion = models.CharField(max_length=250, null=True, blank=True)
+    puntos = models.IntegerField()
+    stock = models.IntegerField()
+    orden = models.IntegerField()
+    imagen = models.ImageField(upload_to="imagenes/premios")  
+    modified = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_created=True)
         
 
     

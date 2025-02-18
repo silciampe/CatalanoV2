@@ -16,14 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.conf.urls.static import static
 from rest_framework import routers
 
-from CatalanoBackend import api, views, auth
+from CatalanoBackend import api, settings, views, auth
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
 router.register(r'motopartes', api.MotoParteViewSet)
 router.register(r'agropartes', api.AgroParteViewSet)
+router.register(r'premios', api.PremioViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -34,4 +36,4 @@ urlpatterns = [
     re_path('logout/', auth.logout, name='logout'),
     re_path('registro/', auth.registro),
     re_path('perfil/', auth.perfil),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
