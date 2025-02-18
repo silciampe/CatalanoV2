@@ -6,6 +6,7 @@ from CatalanoBackend.serializers import UserSerializer
 from .models import MotoParte, AgroParte, Premio 
 from .serializers import MotoParteSerializer, AgroParteSerializer, PremioSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.authentication import TokenAuthentication
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -171,5 +172,6 @@ class PremioViewSet(viewsets.ModelViewSet):
     queryset = Premio.objects.all().order_by('orden')
     serializer_class = PremioSerializer
     filter_backends = [DjangoFilterBackend]
+    authentication_classes = [TokenAuthentication]
     #permission_classes = [IsAuthenticated]
     
