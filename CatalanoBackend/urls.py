@@ -32,6 +32,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/importarMotopartes/', views.ImportarMotopartes.as_view(), name='importarMotopartes'),
+    path('api/importarAgropartes/', views.ImportarAgropartes.as_view(), name='importarAgropartes'),
+    path('api/importarClientes/', views.ImportarClientes.as_view(), name='importarClientes'),
     re_path('login/', auth.login, name='login'),
     re_path('logout/', auth.logout, name='logout'),
     re_path('registro/', auth.registro),

@@ -21,7 +21,7 @@ class MotoParte(models.Model):
     cantidad_estrias_x_espesor_estrias = models.CharField(max_length=250, null=True, blank=True)  
     imagen = models.ImageField(upload_to="imagenes/motopartes")  
     modified = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_created=True)
+    created = models.DateTimeField(auto_now_add=True)
     
 class AgroParte(models.Model):
     id_catalano = models.CharField(max_length=250, null=False, blank=False)
@@ -42,7 +42,7 @@ class AgroParte(models.Model):
     cantidad_estrias_x_espesor_estrias = models.CharField(max_length=250, null=True, blank=True)    
     imagen = models.ImageField(upload_to="imagenes/agropartes")  
     modified = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_created=True)
+    created = models.DateTimeField(auto_now_add=True)
     
    
 class Cliente(models.Model):
@@ -58,6 +58,7 @@ class Cliente(models.Model):
     cuit = models.CharField(max_length=30, null=True, blank=True)
     fecha_actualizacion = models.DateField(auto_now=True)
     rubro = models.IntegerField()
+    id_catalano = models.CharField(max_length=250, null=True, blank=True)
     
 
 class Premio(models.Model):
@@ -69,7 +70,7 @@ class Premio(models.Model):
     orden = models.IntegerField()
     imagen = models.ImageField(upload_to="imagenes/premios")  
     modified = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_created=True)
+    created = models.DateTimeField(auto_now_add=True)
         
 
     
