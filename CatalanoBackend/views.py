@@ -249,14 +249,15 @@ class ImportarClientes(View):
                             rubro=Utils.sanitize_data(linea[6]),
                             tipo_cliente=tipo_cliente
                         )
-                        cliente[0].user.set_password(Utils.sanitize_data(linea[4]))
+                        cliente[0].user.set_password(Utils.sanitize_data(linea[0]))
                         cliente[0].user.email = Utils.sanitize_data(linea[7])
+                        cliente[0].user.save()
                         actualizados += 1
                     else:
                         user = User.objects.create_user(
-                            username=Utils.sanitize_data(linea[0]),
+                            username=Utils.sanitize_data(linea[4]),
                             email=Utils.sanitize_data(linea[7]),
-                            password=Utils.sanitize_data(linea[4])
+                            password=Utils.sanitize_data(linea[0])
                         )
                         Cliente.objects.create(
                             id_catalano=Utils.sanitize_data(linea[0]),
