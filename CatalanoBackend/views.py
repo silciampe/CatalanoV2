@@ -24,7 +24,7 @@ class ImportarAgropartes(View):
             filereader = csv.reader(str_file)
             for linea in filereader:
                 try:
-                    if linea[0] == 'DISCOS Y CUCHILLAS':
+                    if linea[0] == 'DISCOS Y CUCHILLAS' or linea[0] == 'DISCOS DE RASTRA':
                         
                         agroparte = AgroParte.objects.filter(id_catalano=Utils.sanitize_data(linea[2]))
                         if agroparte.exists():

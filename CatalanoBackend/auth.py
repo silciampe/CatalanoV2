@@ -63,9 +63,9 @@ def perfil(request):
     user = request.user
     if not Cliente.objects.filter(user=user).exists():
         user.client = Cliente.objects.create(user = user, 
-                                             razon_social = 'fede aguer', 
-                                             puntos_moto = 10, 
-                                             puntos_agro = 20, 
+                                             razon_social = user.username, 
+                                             puntos_moto = 0, 
+                                             puntos_agro = 0, 
                                              rubro = 1)
     
     serializer = ClienteSerializer(instance=user.cliente)
