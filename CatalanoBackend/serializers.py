@@ -43,8 +43,7 @@ class PremioSerializer(serializers.ModelSerializer):
         ret = super().to_representation(instance)
         cliente = self.context['request'].user.cliente
         ret["puntos"] = instance.puntos_agroparte if cliente.tipo_cliente == 'Agro' else instance.puntos_motoparte 
-        ret["es_admin"] = "1" if self.context['request'].user.is_superuser else "0"
-
+        
         return ret
 
     class Meta:

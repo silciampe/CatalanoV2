@@ -56,12 +56,14 @@ class ImportarAgropartes(View):
                                 imagen=Utils.format_image_path(carpeta, linea[10])
                             )
                             nuevos += 1
-                    elif linea[0] == 'MEDIAS LLANTAS': 
+                    elif linea[0] == 'MEDIAS LLANTAS':
+                        #el archivo viene 'MEDIAS LLANTAS' pero en grupo y modelo se guarda 'MEDIA LLANTA NATURAL'
+                        grupo = 'MEDIA LLANTA NATURAL' 
                         agroparte = AgroParte.objects.filter(id_catalano=Utils.sanitize_data(linea[2]))
                         if agroparte.exists():
                             agroparte.update(
-                                grupo=Utils.sanitize_data(linea[0]),
-                                modelo=Utils.sanitize_data(linea[1]),
+                                grupo=grupo,
+                                modelo=grupo,
                                 medida_cub=Utils.sanitize_data(linea[3]) + ' ' + Utils.sanitize_data(linea[4]) ,
                                 diametro_interior=Utils.sanitize_data(linea[5]),
                                 diametro_exterior=Utils.sanitize_data(linea[6]),
@@ -74,8 +76,8 @@ class ImportarAgropartes(View):
                         else:
                             AgroParte.objects.create(
                                 id_catalano=Utils.sanitize_data(linea[2]),
-                                grupo=Utils.sanitize_data(linea[0]),
-                                modelo=Utils.sanitize_data(linea[1]),
+                                grupo=grupo,
+                                modelo=grupo,
                                 medida_cub=Utils.sanitize_data(linea[3]) + ' ' + Utils.sanitize_data(linea[4]) ,
                                 diametro_interior=Utils.sanitize_data(linea[5]),
                                 diametro_exterior=Utils.sanitize_data(linea[6]),
