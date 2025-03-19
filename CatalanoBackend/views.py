@@ -14,8 +14,9 @@ class ImportarAgropartes(View):
     def post (self, request):
         archivo = request.FILES['file']
         str_file = io.StringIO(archivo.read().decode('latin-1'), newline='\n')
-        #file_extension = pathlib.Path(file.name).suffix
         carpeta = 'agropartes'
+        ids = []
+        agropartes_existentes = None
         errores = []
         nuevos = 0
         actualizados = 0
@@ -24,8 +25,15 @@ class ImportarAgropartes(View):
             filereader = csv.reader(str_file)
             for linea in filereader:
                 try:
+                    if agropartes_existentes is None:
+                        if linea[0] == 'MEDIAS LLANTAS':
+                            #el archivo viene 'MEDIAS LLANTAS' pero en grupo y modelo se guarda 'MEDIA LLANTA NATURAL'
+                            grupo = 'MEDIA LLANTA NATURAL' 
+                        else:
+                            grupo = Utils.sanitize_data(linea[0])
+                        agropartes_existentes = AgroParte.objects.filter(grupo=grupo)
+                    ids.append(Utils.sanitize_data(linea[2]))
                     if linea[0] == 'DISCOS Y CUCHILLAS' or linea[0] == 'DISCOS DE RASTRA':
-                        
                         agroparte = AgroParte.objects.filter(id_catalano=Utils.sanitize_data(linea[2]))
                         if agroparte.exists():
                             agroparte.update(
@@ -112,6 +120,12 @@ class ImportarAgropartes(View):
                 except Exception as e:
                     errores.append(f"Error al importar {linea[2]} - {str(e)}")
             
+            #need to check which ids from agropartes_existentes are not in the ids list, so we can delete them
+            for agroparte in agropartes_existentes:
+                if agroparte.id_catalano not in ids:
+                    agroparte.delete()
+
+
             #TODO: chequear las imagenes que no existen
             mensaje=f"{archivo.name} se importo correctamente. Nuevos: {nuevos}, Actualizados: {actualizados}"
             if len(errores) > 0:
@@ -131,14 +145,25 @@ class ImportarMotopartes(View):
         errores = []
         nuevos = 0
         actualizados = 0
+        ids = []
+        motopartes_existentes = None
 
         try:
             filereader = csv.reader(str_file)
             for linea in filereader:
                 try:
+                    if motopartes_existentes is None:
+                        if linea[0] == 'CORONAS':
+                            #el archivo viene 'MEDIAS LLANTAS' pero en grupo y modelo se guarda 'MEDIA LLANTA NATURAL'
+                            grupo = 'CORONA' 
+                        else:
+                            grupo = Utils.sanitize_data(linea[0])
+                        motopartes_existentes = AgroParte.objects.filter(grupo=grupo)
+                    ids.append(Utils.sanitize_data(linea[1]))
+
                     if linea[0] == 'CORONAS':
                         linea[0] = 'CORONA'
-                        motoparte = MotoParte.objects.filter(id_catalano=Utils.sanitize_data(linea[1]))
+                        motoparte = AgroParte.objects.filter(id_catalano=Utils.sanitize_data(linea[1]))
                         if motoparte.exists():
                             motoparte.update(
                                 grupo=Utils.sanitize_data(linea[0]),
@@ -206,6 +231,13 @@ class ImportarMotopartes(View):
                             nuevos += 1
                 except Exception as e:
                     errores.append(f"Error al importar {linea[1]} - {str(e)}")
+
+
+            #need to check which ids from agropartes_existentes are not in the ids list, so we can delete them
+            for motoparte in motopartes_existentes:
+                if motoparte.id_catalano not in ids:
+                    motoparte.delete()
+
             #TODO: chequear las imagenes que no existen
 
             mensaje=f"{archivo.name} se importo correctamente. Nuevos: {nuevos}, Actualizados: {actualizados}"
@@ -224,6 +256,8 @@ class ImportarClientes(View):
         errores = []
         nuevos = 0
         actualizados = 0
+        ids = []
+        clientes_existentes = None
 
         try:
             
@@ -232,6 +266,9 @@ class ImportarClientes(View):
                 try:
                     if len(linea) == 0:
                         continue
+                    clientes_existentes = Cliente.objects.all()
+                    ids.append(linea[0])
+
                     cliente = Cliente.objects.filter(id_catalano=linea[0])
                     puntos = 0
                     # tipo cliente 5 es Agro, 1 es Moto
@@ -274,6 +311,12 @@ class ImportarClientes(View):
                         nuevos += 1
                 except Exception as e:
                     errores.append(f"Error al importar {linea[0]} - {str(e)}")
+
+            #need to check which ids from agropartes_existentes are not in the ids list, so we can delete them
+            for cliente in clientes_existentes:
+                if not cliente.user.is_superuser and cliente.id_catalano not in ids:
+                    cliente.delete()
+            
             mensaje=f"{archivo.name} se importo correctamente. Nuevos: {nuevos}, Actualizados: {actualizados}"
             if len(errores) > 0:
                 mensaje += f", Errores: {errores}"
