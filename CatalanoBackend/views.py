@@ -138,6 +138,8 @@ class ImportarMotopartes(View):
                 try:
                     if linea[0] == 'CORONAS':
                         linea[0] = 'CORONA'
+                        if Utils.sanitize_data(linea[1]) == 'P/CONTROL':
+                            continue
                         motoparte = MotoParte.objects.filter(id_catalano=Utils.sanitize_data(linea[1]))
                         if motoparte.exists():
                             motoparte.update(
