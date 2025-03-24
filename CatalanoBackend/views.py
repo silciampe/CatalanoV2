@@ -29,6 +29,9 @@ class ImportarAgropartes(View):
             filereader = csv.reader(str_file)
             for linea in filereader:
                 try:
+                    #skip empty lines
+                    if len(linea) == 0:
+                        continue
                     if agropartes_existentes is None:
                         if linea[0] == 'MEDIAS LLANTAS':
                             #el archivo viene 'MEDIAS LLANTAS' pero en grupo y modelo se guarda 'MEDIA LLANTA NATURAL'
@@ -173,6 +176,8 @@ class ImportarMotopartes(View):
             filereader = csv.reader(str_file)
             for linea in filereader:
                 try:
+                    if len(linea) == 0:
+                        continue 
                     if motopartes_existentes is None:
                         if linea[0] == 'CORONAS':
                             #el archivo viene 'MEDIAS LLANTAS' pero en grupo y modelo se guarda 'MEDIA LLANTA NATURAL'
@@ -287,7 +292,8 @@ class ImportarMotopartes(View):
 class ImportarClientes(View):
     def post (self, request):
         archivo = request.FILES['file']
-        str_file = io.StringIO(archivo.read().decode('latin-1'), newline='\n')
+        str_file = io.StringIO(archivo.read().decode('utf-8'), newline='\n')
+        #str_file = io.StringIO(archivo.read().decode('latin-1'), newline='\n')
         errores = []
         nuevos = 0
         actualizados = 0
