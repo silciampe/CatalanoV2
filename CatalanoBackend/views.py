@@ -16,6 +16,12 @@ class ImportarAgropartes(View):
     def post (self, request):
         archivo = request.FILES['file']
         str_file = io.StringIO(archivo.read().decode('latin-1'), newline='\n')
+        contenido = str_file.read()
+        if 'Â' in contenido:
+            archivo.seek(0)
+            str_file = io.StringIO(archivo.read().decode('utf-8'), newline='\n')
+        else:
+            str_file.seek(0)
         carpeta = 'agropartes'
         ids = []
         agropartes_existentes = None
@@ -163,6 +169,12 @@ class ImportarMotopartes(View):
     def post (self, request):
         archivo = request.FILES['file']
         str_file = io.StringIO(archivo.read().decode('latin-1'), newline='\n')
+        contenido = str_file.read()
+        if 'Â' in contenido:
+            archivo.seek(0)
+            str_file = io.StringIO(archivo.read().decode('utf-8'), newline='\n')
+        else:
+            str_file.seek(0)
         carpeta = 'motopartes'
         errores = []
         warnings = []
@@ -292,8 +304,13 @@ class ImportarMotopartes(View):
 class ImportarClientes(View):
     def post (self, request):
         archivo = request.FILES['file']
-        str_file = io.StringIO(archivo.read().decode('utf-8'), newline='\n')
-        #str_file = io.StringIO(archivo.read().decode('latin-1'), newline='\n')
+        str_file = io.StringIO(archivo.read().decode('latin-1'), newline='\n')
+        contenido = str_file.read()
+        if 'Â' in contenido:
+            archivo.seek(0)
+            str_file = io.StringIO(archivo.read().decode('utf-8'), newline='\n')
+        else:
+            str_file.seek(0)
         errores = []
         nuevos = 0
         actualizados = 0
