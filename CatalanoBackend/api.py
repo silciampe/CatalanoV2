@@ -3,11 +3,10 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import action 
 from rest_framework.response import Response
 from CatalanoBackend.serializers import UserSerializer  
-from .models import MotoParte 
-from .models import AgroParte 
-from .serializers import MotoParteSerializer
-from .serializers import AgroParteSerializer
+from .models import MotoParte, AgroParte, Premio 
+from .serializers import MotoParteSerializer, AgroParteSerializer, PremioSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.authentication import TokenAuthentication
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -21,6 +20,7 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import MotoParte
 from .serializers import MotoParteSerializer
+from rest_framework.permissions import IsAuthenticated
 
 class MotoParteViewSet(viewsets.ModelViewSet):
     queryset = MotoParte.objects.all().order_by('id_catalano')
@@ -167,3 +167,11 @@ class AgroParteViewSet(viewsets.ModelViewSet):
             print(line)
 
         return Response('exito')
+    
+class PremioViewSet(viewsets.ModelViewSet):
+    queryset = Premio.objects.all().order_by('orden')
+    serializer_class = PremioSerializer
+    filter_backends = [DjangoFilterBackend]
+    authentication_classes = [TokenAuthentication]
+    #permission_classes = [IsAuthenticated]
+    
