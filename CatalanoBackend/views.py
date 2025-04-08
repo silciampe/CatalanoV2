@@ -338,19 +338,25 @@ class ImportarClientes(View):
                     else:
                         puntos = Utils.sanitize_data(linea[2])
                         tipo_cliente = Cliente.TIPO_CLIENTE[1][0]
+                    #check if puntos can be parsed to int
+                    try:
+                        puntos = int(puntos)
+                    except ValueError:  
+                        puntos = 0
+                    
                     if cliente != None:
-                        cliente.update(
-                            razon_social=Utils.sanitize_data(linea[1]),
-                            puntos=puntos,
-                            cuit=Utils.sanitize_data(linea[4]),
-                            # sample date is 16/12/24
-                            fecha_actualizacion=datetime.datetime.strptime(linea[5], '%d/%m/%y'),
-                            rubro=Utils.sanitize_data(linea[6]),
-                            tipo_cliente=tipo_cliente
-                        )
-                        cliente[0].user.set_password(Utils.sanitize_data(linea[0]))
-                        cliente[0].user.email = Utils.sanitize_data(linea[7])
-                        cliente[0].user.save()
+                        cliente.razon_social=Utils.sanitize_data(linea[1])
+                        cliente.puntos=puntos
+                        cliente.cuit=Utils.sanitize_data(linea[4])
+                        # sample date is 16/12/24
+                        cliente.fecha_actualizacion=datetime.datetime.strptime(linea[5], '%d/%m/%y')
+                        cliente.rubro=Utils.sanitize_data(linea[6])
+                        cliente.tipo_cliente=tipo_cliente
+                        cliente.save()
+                        user = cliente.user
+                        user.set_password(Utils.sanitize_data(linea[0]))
+                        user.email = Utils.sanitize_data(linea[7])
+                        user.save()
                         actualizados += 1
                     else:
                         user = User.objects.create_user(
