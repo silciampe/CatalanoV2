@@ -325,10 +325,11 @@ class ImportarClientes(View):
                 try:
                     if len(linea) == 0:
                         continue
-                    clientes_existentes = Cliente.objects.all()
+                    clientes_existentes = list(Cliente.objects.all())
                     ids.append(linea[0])
 
-                    cliente = Cliente.objects.filter(id_catalano=linea[0])
+                    #filter by id_catalano in clientes_existentes
+                    cliente = next((c for c in clientes_existentes if c.id_catalano == linea[0]), None)
                     puntos = 0
                     # tipo cliente 5 es Agro, 1 es Moto
                     if Utils.sanitize_data(linea[6]) == '5':
@@ -337,19 +338,19 @@ class ImportarClientes(View):
                     else:
                         puntos = Utils.sanitize_data(linea[2])
                         tipo_cliente = Cliente.TIPO_CLIENTE[1][0]
-                    if cliente.exists():
-                        cliente.update(
-                            razon_social=Utils.sanitize_data(linea[1]),
-                            puntos=puntos,
-                            cuit=Utils.sanitize_data(linea[4]),
-                            # sample date is 16/12/24
-                            fecha_actualizacion=datetime.datetime.strptime(linea[5], '%d/%m/%y'),
-                            rubro=Utils.sanitize_data(linea[6]),
-                            tipo_cliente=tipo_cliente
-                        )
-                        cliente[0].user.set_password(Utils.sanitize_data(linea[0]))
-                        cliente[0].user.email = Utils.sanitize_data(linea[7])
-                        cliente[0].user.save()
+                    if cliente != None:
+                        #cliente.update(
+                        #    razon_social=Utils.sanitize_data(linea[1]),
+                        #    puntos=puntos,
+                        #    cuit=Utils.sanitize_data(linea[4]),
+                        #    # sample date is 16/12/24
+                        #    fecha_actualizacion=datetime.datetime.strptime(linea[5], '%d/%m/%y'),
+                        #    rubro=Utils.sanitize_data(linea[6]),
+                        #    tipo_cliente=tipo_cliente
+                        #)
+                        #cliente[0].user.set_password(Utils.sanitize_data(linea[0]))
+                        #cliente[0].user.email = Utils.sanitize_data(linea[7])
+                        #cliente[0].user.save()
                         actualizados += 1
                     else:
                         user = User.objects.create_user(
