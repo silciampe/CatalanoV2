@@ -71,6 +71,13 @@ class Premio(models.Model):
     imagen = models.ImageField(upload_to="imagenes/premios")  
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+
+class Catalogo(models.Model):
+    nombre = models.CharField(max_length=250, null=True, blank=True)
+    orden = models.IntegerField()
+    imagen = models.ImageField(upload_to="imagenes/catalogo")  
+    archivo = models.FileField(upload_to="imagenes/catalogos/archivos")
+
         
 
     

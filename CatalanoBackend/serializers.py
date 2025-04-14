@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import MotoParte, AgroParte, Cliente, Premio 
+from .models import MotoParte, AgroParte, Cliente, Premio, Catalogo 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     def to_representation(self, instance):
@@ -49,3 +49,10 @@ class PremioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Premio
         fields = ['nombre', 'descripcion', 'imagen']
+
+
+class CatalogoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Catalogo
+        fields = '__all__'
