@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import action 
 from rest_framework.response import Response
 from CatalanoBackend.serializers import UserSerializer  
-from .models import MotoParte, AgroParte, Premio 
-from .serializers import MotoParteSerializer, AgroParteSerializer, PremioSerializer
+from .models import MotoParte, AgroParte, Premio, Catalogo 
+from .serializers import MotoParteSerializer, AgroParteSerializer, PremioSerializer, CatalogoSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import TokenAuthentication
 
@@ -18,16 +18,17 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from .models import MotoParte
 from .serializers import MotoParteSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class MotoParteViewSet(viewsets.ModelViewSet):
-    queryset = MotoParte.objects.all().order_by('id_catalano')
+    queryset = MotoParte.objects.all()
     serializer_class = MotoParteSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['grupo', 'id_catalano', 'marca', 'dientes', 'modelo', 'cadena', 'diametro_exterior', 'diametro_interior', 'diametro_rodillo', 'cantidad_agujero_x_diametro_agujero', 'cantidad_estrias_x_tipo_rosca', 'cantidad_estrias_x_espesor_estrias']
-    
+    ordering = ['marca', 'modelo']
     
         # Método para obtener marcas según el grupo
     @action(detail=False, methods=['get'], url_path='marcas')
@@ -86,15 +87,15 @@ class MotoParteViewSet(viewsets.ModelViewSet):
             filters &= Q(cantidad_agujero_x_diametro_agujero__icontains=cantidad_diam_ag)
 
         # Aplicar los filtros a la consulta
-        resultados = MotoParte.objects.filter(filters).order_by('id_catalano')
+        resultados = MotoParte.objects.filter(filters)
         serializer = self.get_serializer(resultados, many=True)
         return Response(serializer.data)
 
         return Response(serializer.data)
 class AgroParteViewSet(viewsets.ModelViewSet):
-    queryset = AgroParte.objects.all().order_by('id_catalano')
+    queryset = AgroParte.objects.all()
     serializer_class = AgroParteSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['grupo', 'id_catalano', 'medida_cub', "espesor_mm", 'dientes', 'rad_mm', 'modelo', 'marca', 'cadena', 'observacion', 'diametro_exterior', 'diametro_interior', 'diametro_rodillo', 'cantidad_agujero_x_diametro_agujero', 'cantidad_estrias_x_tipo_rosca', 'cantidad_estrias_x_espesor_estrias']
     
         # Método para obtener marcas según el grupo
@@ -155,7 +156,7 @@ class AgroParteViewSet(viewsets.ModelViewSet):
         if cantidad_diam_ag:
             filters &= Q(cantidad_agujero_x_diametro_agujero__icontains=cantidad_diam_ag)
 
-        resultados = AgroParte.objects.filter(filters).order_by('id_catalano')
+        resultados = AgroParte.objects.filter(filters)
         serializer = self.get_serializer(resultados, many=True)
         return Response(serializer.data)
     
@@ -169,9 +170,17 @@ class AgroParteViewSet(viewsets.ModelViewSet):
         return Response('exito')
     
 class PremioViewSet(viewsets.ModelViewSet):
-    queryset = Premio.objects.all().order_by('orden')
+    queryset = Premio.objects.all()
     serializer_class = PremioSerializer
     filter_backends = [DjangoFilterBackend]
     authentication_classes = [TokenAuthentication]
-    #permission_classes = [IsAuthenticated]
+    filter_backends = [filters.OrderingFilter]
+    ordering = ['orden']
+
+class CatalogoViewSet(viewsets.ModelViewSet):
+    queryset = Catalogo.objects.all()
+    serializer_class = CatalogoSerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_backends = [filters.OrderingFilter]
+    ordering = ['orden']
     
