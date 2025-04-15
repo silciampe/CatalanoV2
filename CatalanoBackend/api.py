@@ -26,10 +26,9 @@ from rest_framework.permissions import IsAuthenticated
 class MotoParteViewSet(viewsets.ModelViewSet):
     queryset = MotoParte.objects.all()
     serializer_class = MotoParteSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['grupo', 'id_catalano', 'marca', 'dientes', 'modelo', 'cadena', 'diametro_exterior', 'diametro_interior', 'diametro_rodillo', 'cantidad_agujero_x_diametro_agujero', 'cantidad_estrias_x_tipo_rosca', 'cantidad_estrias_x_espesor_estrias']
-    filter_backends = [filters.OrderingFilter]
-    ordering = ['id_catalano']
+    ordering = ['marca', 'modelo']
     
         # Método para obtener marcas según el grupo
     @action(detail=False, methods=['get'], url_path='marcas')
@@ -96,11 +95,9 @@ class MotoParteViewSet(viewsets.ModelViewSet):
 class AgroParteViewSet(viewsets.ModelViewSet):
     queryset = AgroParte.objects.all()
     serializer_class = AgroParteSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['grupo', 'id_catalano', 'medida_cub', "espesor_mm", 'dientes', 'rad_mm', 'modelo', 'marca', 'cadena', 'observacion', 'diametro_exterior', 'diametro_interior', 'diametro_rodillo', 'cantidad_agujero_x_diametro_agujero', 'cantidad_estrias_x_tipo_rosca', 'cantidad_estrias_x_espesor_estrias']
-    filter_backends = [filters.OrderingFilter]
-    ordering = ['id_catalano']
-
+    
         # Método para obtener marcas según el grupo
     @action(detail=False, methods=['get'], url_path='marcas')
     def marcas(self, request):
