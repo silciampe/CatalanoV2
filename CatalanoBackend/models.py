@@ -75,7 +75,6 @@ class Premio(models.Model):
 class Catalogo(models.Model):
     nombre = models.CharField(max_length=250, null=True, blank=True)
     orden = models.IntegerField()
-    imagen = models.ImageField(upload_to="imagenes/catalogo")  
     archivo = models.FileField(upload_to="imagenes/catalogos/archivos")
 
         
