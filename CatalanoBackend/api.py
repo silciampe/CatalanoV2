@@ -28,7 +28,7 @@ class MotoParteViewSet(viewsets.ModelViewSet):
     serializer_class = MotoParteSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['grupo', 'id_catalano', 'marca', 'dientes', 'modelo', 'cadena', 'diametro_exterior', 'diametro_interior', 'diametro_rodillo', 'cantidad_agujero_x_diametro_agujero', 'cantidad_estrias_x_tipo_rosca', 'cantidad_estrias_x_espesor_estrias']
-    ordering = ['marca', 'modelo']
+    ordering = ['marca']
     
         # Método para obtener marcas según el grupo
     @action(detail=False, methods=['get'], url_path='marcas')
